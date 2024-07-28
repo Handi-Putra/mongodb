@@ -10,13 +10,9 @@ const createUserHandler = async (req, res, next) => {
 
         if (usrExist == 0) {
             const usr = await createUser(req.body);
-            return res
-                .status(202)
-                .jsonp({ msg: "Account Created Successfully!", user: usr });
+            return res.status(202).jsonp({ msg: "Account Created Successfully!", user: usr });
         } else {
-            return res
-                .status(410)
-                .jsonp("Email Address Already Exist... Try With New Email!");
+            return res.status(410).jsonp("Email Address Already Exist... Try With New Email!");
         }
     } catch (e) {
         return res.status(409).jsonp(e.message);
