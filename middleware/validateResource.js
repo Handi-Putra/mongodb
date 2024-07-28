@@ -7,10 +7,10 @@ const validateResource = (schema) => async (req, res, next) => {
 
     try {
         await schema.validateAsync({
-                body: req.body,
-                query: req.query,
-                params: req.params,
-            }, options);
+            body: req.body,
+            query: req.query,
+            params: req.params,
+        }, options);
         next();
     } catch (e) {
         return res.status(400).jsonp(e.details);

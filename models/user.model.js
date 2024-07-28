@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const config = require("config");
 const bcrypt = require("bcrypt");
 
-
 const userSchema = new mongoose.Schema(
     {
         fullName: {
@@ -22,24 +21,25 @@ const userSchema = new mongoose.Schema(
     {
         timestamps: true,
     }
-)
+);
 
-userSchema.pre("save", async(next) => {
+// Use a regular function to maintain the context of 'this'
+userSchema.pre("save", async function (next) {
     let usr = this;
-    if ((!usr, isModified("password"))) return next();
+    if (!usr.isModified("password")) return next();
 
     const salt = await bcrypt.genSalt(config.get("saltFactor"));
     const hash = await bcrypt.hashSync(usr.password, salt);
 
     usr.password = hash;
 
-    return next();
+    next();
 });
 
-userSchema.methods.comparePassword = async (usrPass) => {
+userSchema.methods.comparePassword = async function (usrPass) {
     const usr = this;
-    return bcrypt.compare(usrPass, usr.password).catch((e) => false)
-}
+    return bcrypt.compare(usrPass, usr.password).catch((e) => false);
+};
 
 const userModel = mongoose.model("User", userSchema);
 

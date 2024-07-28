@@ -16,14 +16,12 @@ const checkEmail = async (email) => {
 
 const validateUser = async (user) => {
     const usr = await userModel.findOne({ email: user.email });
-    if (!usr)
-    return false;
+    if (!usr) return false;
 
     const isValid = await usr.comparePassword(user.password);
 
     if(!isValid) return false;
-    else
-    return omit(usr.toJSON(), "password");
+    else return omit(usr.toJSON(), "password");
 };
 
 module.exports = { createUser, checkEmail, validateUser };
